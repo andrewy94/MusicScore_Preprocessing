@@ -31,15 +31,20 @@ def binarize(gray_img):
 def calculate_skew_angle(bin_img):
     # Calculate skew angle using canny edge detection and standard hough line transform
     # to find lines and determine the average angle of near-horizontal lines
-    edges = cv2.Canny(
+    blur = cv2.GaussianBlur(
         bin_img, 
-        50, 
-        150)
+        (3, 3), 
+        0)
+    
+    edges = cv2.Canny(
+        blur, 
+        30, 
+        100)
     
     lines = cv2.HoughLines(
         edges, 
         1, 
-        np.pi / 180, 
+        np.pi / 3600, 
         200)
 
 
@@ -65,8 +70,8 @@ def deskew(bin_img, skew_angle):
     center = (w // 2, h // 2)
     rotation_matrix = cv2.getRotationMatrix2D(center, skew_angle, 1.0)
 
-    preprocessed_img = cv2.warpAffine(bin_img, rotation_matrix, (w, h), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
+    pp_img = cv2.warpAffine(bin_img, rotation_matrix, (w, h), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
 
-    return preprocessed_img
+    return pp_img
 
 
