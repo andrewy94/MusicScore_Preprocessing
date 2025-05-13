@@ -35,9 +35,9 @@ def test_binarize():
 
 def test_calculate_skew_angle_valid_lines():
     dummy_img = np.zeros((100, 300), dtype = np.uint8)
-    cv2. line(dummy_img, (0, 45), (300, 50), 255, 1) # 42.3 degree angle line
-    cv2. line(dummy_img, (0, 50), (300, 60), 255, 1) # 42.3 degree angle line
-    cv2. line(dummy_img, (0,55), (300, 70), 255, 1) # 42.3 degree angle line
+    cv2.line(dummy_img, (0, 45), (300, 50), 255, 1) # 42.3 degree angle line
+    cv2.line(dummy_img, (0, 50), (300, 60), 255, 1) # 42.3 degree angle line
+    cv2.line(dummy_img, (0,55), (300, 70), 255, 1) # 42.3 degree angle line
    
     skew_angle = calculate_skew_angle(dummy_img)
 
@@ -47,7 +47,7 @@ def test_calculate_skew_angle_valid_lines():
 def test_calculate_skew_angle_45_deg_lines():
     dummy_img = np.zeros((300, 300), dtype = np.uint8)
     cv2.line(dummy_img, (0, 0), (300, 300), 255, 1) # 45 degree angle line
-    cv2. line(dummy_img, (0, 300), (300, 0), 255, 1) # -45 degree angle line
+    cv2.line(dummy_img, (0, 300), (300, 0), 255, 1) # -45 degree angle line
     skew_angle = calculate_skew_angle(dummy_img)
 
     assert np.isclose(skew_angle, 45, atol=2), \
