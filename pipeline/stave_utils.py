@@ -1,7 +1,8 @@
 import cv2
 import numpy as np
+from statistics import mode
 
-def detect_staves(pp_img):
+def detect_hor_lines(pp_img):
     horizontal_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (40,1))
     detect_horizontal = cv2.morphologyEx(pp_img, cv2.MORPH_OPEN, horizontal_kernel, iterations=1)
 
@@ -10,13 +11,46 @@ def detect_staves(pp_img):
     horizontal_projection = np.sum(detected_staves, axis = 1)
     threshold = 0.9 * np.max(horizontal_projection)
     potential_lines = np.where(horizontal_projection > threshold)
-
-    return detected_staves
     
-def remove_staves(pp_img, detected_staves):
-    image_without_lines = cv2.subtract(pp_img, detected_staves) 
+    y_coords = potential_lines[0]
+
+    return detected_staves, y_coords
+
+def average_close_hor_lines(obs_y_coords):
+    y_coords = np.sort(obs_y_coords)
+    lines = []
+    current_line = [y_coords[0]]
+    for i in range(1, len(obs_y_coords)):
+        if y_coords[i] - y_coords[i-1] <= 3:
+          current_line.append(y_coords[i])
+        else:
+           lines.append(current_line)
+           current_line = [y_coords[i]]
+    
+    lines.append(current_line)
+
+    return [int(np.mean(line)) for line in lines]
+
+def group_stave_lines(lines):
+    staves = []
+    i = 0
+    while i + 4 < len(lines):
+        window = lines[i:i+5]
+        spacings = [window[j+1] - window[j] for j in range(4)]
+        spacings_mode = mode(spacings)
+
+        if all(abs(space - spacings_mode) <= 3 for space in spacings):
+            staves.append(window.copy())
+            i += 5
+        else:
+            i += 1
+    
+    return staves
+    
+def remove_hor_lines(pp_img, detected_staves):
+    no_hor_img = cv2.subtract(pp_img, detected_staves) 
 
     vertical_kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5,5))
-    repair_gaps = cv2.morphologyEx(image_without_lines, cv2.MORPH_CLOSE, vertical_kernel)    
+    no_hor_img = cv2.morphologyEx(no_hor_img, cv2.MORPH_CLOSE, vertical_kernel)    
 
-    final_image = cv2.bitwise_not(repair_gaps)
+    return no_hor_img
