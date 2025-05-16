@@ -20,12 +20,12 @@ def average_close_hor_lines(obs_y_coords):
     y_coords = np.sort(obs_y_coords)
     lines = []
     current_line = [y_coords[0]]
-    for i in range(1, len(obs_y_coords)):
-        if y_coords[i] - y_coords[i-1] <= 3:
-          current_line.append(y_coords[i])
+    for prev, curr in zip(y_coords, y_coords[1:]):
+        if curr - prev <= 3:
+          current_line.append(curr)
         else:
            lines.append(current_line)
-           current_line = [y_coords[i]]
+           current_line = [curr]
     
     lines.append(current_line)
 
