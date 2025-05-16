@@ -6,7 +6,7 @@ from tests.utils import generate_dummy_score
 
 def test_detect_hor_lines_valid_img():
     # setup
-    dummy_img, act_y_coords = generate_dummy_score(
+    dummy_img, exp_y_coords = generate_dummy_score(
         height = 3508,
         width = 2480,
         num_staves = 8,
@@ -18,14 +18,14 @@ def test_detect_hor_lines_valid_img():
     )
 
     # test
-    _, obs_y_coords = detect_hor_lines(dummy_img)
-    obs_len = len(obs_y_coords)
-    act_len = len(act_y_coords)
-    assert obs_len == act_len, f"expected {act_len} y_coords, but got {obs_len} y_coords"
+    _, act_y_coords = detect_hor_lines(dummy_img)
+    obs_len = len(act_y_coords)
+    exp_len = len(exp_y_coords)
+    assert obs_len == exp_len, f"expected {exp_len} y_coords, but got {obs_len} y_coords"
 
 def test_average_close_hor_lines_valid_img():
     # setup
-    dummy_img, act_y_coords = generate_dummy_score(
+    dummy_img, exp_y_coords = generate_dummy_score(
         height = 3508,
         width = 2480,
         num_staves = 8,
@@ -35,15 +35,15 @@ def test_average_close_hor_lines_valid_img():
         left_margin = 100,
         top_margin = 250
     )
-    _, obs_y_coords = detect_hor_lines(dummy_img)
+    _, act_y_coords = detect_hor_lines(dummy_img)
 
     # test
-    merged_obs_y_coords = average_close_hor_lines(obs_y_coords)
+    merged_obs_y_coords = average_close_hor_lines(act_y_coords)
 
     obs_len = len(merged_obs_y_coords)
-    act_len = len(act_y_coords)
+    exp_len = len(exp_y_coords)
 
-    assert obs_len == act_len, f"expected {act_len} y_coords, but got {obs_len} y_coords"
+    assert obs_len == exp_len, f"expected {exp_len} y_coords, but got {obs_len} y_coords"
 
 def test_group_stave_lines_valid_img():
     # setup
@@ -58,8 +58,8 @@ def test_group_stave_lines_valid_img():
         left_margin = 100,
         top_margin = 250
     )
-    _, obs_y_coords = detect_hor_lines(dummy_img)
-    merged_obs_y_coords = average_close_hor_lines(obs_y_coords)
+    _, act_y_coords = detect_hor_lines(dummy_img)
+    merged_obs_y_coords = average_close_hor_lines(act_y_coords)
 
     # test
     staves = group_stave_lines(merged_obs_y_coords)
