@@ -21,4 +21,13 @@ def generate_dummy_score(
             cv2.line(dummy_img, (left_margin, y), (width - left_margin, y), 255, thickness=line_thickness)
     return dummy_img, line_pos
 
+def verify_bboxes(img, bboxes, color=(0, 255, 0), thickness=1):
+    if len(img.shape) == 2:
+        img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
+
+    for x1, y1, x2, y2 in bboxes:
+        cv2.rectangle(img, (x1, y1), (x2, y2), color, thickness)
+
+    return img
+
 
