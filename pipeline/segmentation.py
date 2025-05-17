@@ -16,7 +16,7 @@ def find_segments(proj):
         coords.append((start, len(proj)))
     return coords
 
-def full_segmentation(img):
+def projection_segmentation(img):
     alternate_flag = 1
     prev_count = 0
     # Initial bbox: full image
@@ -45,5 +45,14 @@ def full_segmentation(img):
         alternate_flag = 1 - alternate_flag
 
     return curr_bboxes
+
+def connected_component_segmentation(img):
+    num_labels, _, stats, _ = cv2.connectedComponentsWithStats(img, connectivity=8)
+    
+    bboxes = []
+    for i in range(1, num_labels):  # skip background
+        x, y, w, h, _ = stats[i]
+        bboxes.append((x, y, x + w, y + h))
+    return bboxes
 
 
