@@ -68,6 +68,7 @@ def remove_vert_lines(pp_img):
 
 
     _, vert_lines = cv2.threshold(detect_lines,30,255,cv2.THRESH_BINARY)
+    vert_lines = cv2.dilate(vert_lines, cv2.getStructuringElement(cv2.MORPH_RECT, (1, 5)))
 
     no_vert_img = cv2.subtract(pp_img, vert_lines)
 
