@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 import cv2
-from pipeline.image_preprocess import load_image, to_grayscale, binarize, calculate_skew_angle, deskew
+from pipeline.image_preprocess import *
 
 def test_load_image_valid_path(tmp_path):
     dummy_img = np.zeros((100, 100, 3))
