@@ -17,16 +17,14 @@ def to_grayscale(img):
 
 def binarize(gray_img):
     # Convert a 1-channel image to a binary image
-    bin_img = cv2.adaptiveThreshold(
-        gray_img, 
-        255, 
-        cv2.ADAPTIVE_THRESH_MEAN_C, 
-        cv2.THRESH_BINARY, 
-        11, 
-        2
-    )
+    _,bin_img= cv2.threshold(gray_img,200,255,cv2.THRESH_BINARY)
     
     return bin_img
+
+def invert(bin_img):
+    inv_img = cv2.bitwise_not(bin_img)
+
+    return inv_img
 
 def calculate_skew_angle(bin_img):
     # Calculate skew angle using canny edge detection and standard hough line transform
@@ -59,10 +57,17 @@ def calculate_skew_angle(bin_img):
     if len(angles) > 0: 
         skew_angle = np.mean(angles)
         print(f"Skew angle: {skew_angle:.2f} degrees")
+
+        if abs(skew_angle) > 1:
+            pass
+        
+        else:
+            skew_angle = 0
+
     else:
         skew_angle = 0
         print("No significant lines detected for deskewing.")
-    
+
     return skew_angle
 
 def deskew(bin_img, skew_angle):
@@ -73,5 +78,6 @@ def deskew(bin_img, skew_angle):
     pp_img = cv2.warpAffine(bin_img, rotation_matrix, (w, h), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
 
     return pp_img
+
 
 
