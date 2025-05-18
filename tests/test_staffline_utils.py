@@ -19,9 +19,9 @@ def test_detect_hor_lines_valid_img():
 
     # test
     act_y_coords = detect_hor_lines(dummy_img)
-    obs_len = len(act_y_coords)
+    act_len = len(act_y_coords)
     exp_len = len(exp_y_coords)
-    assert obs_len == exp_len, f"expected {exp_len} y_coords, but got {obs_len} y_coords"
+    assert act_len == exp_len, f"expected {exp_len} y_coords, but got {act_len} y_coords"
 
 def test_average_close_hor_lines_valid_img():
     # setup
@@ -38,12 +38,12 @@ def test_average_close_hor_lines_valid_img():
     act_y_coords = detect_hor_lines(dummy_img)
 
     # test
-    merged_obs_y_coords = average_close_hor_lines(act_y_coords)
+    merged_act_y_coords = average_close_hor_lines(act_y_coords)
 
-    obs_len = len(merged_obs_y_coords)
+    act_len = len(merged_act_y_coords)
     exp_len = len(exp_y_coords)
 
-    assert obs_len == exp_len, f"expected {exp_len} y_coords, but got {obs_len} y_coords"
+    assert act_len == exp_len, f"expected {exp_len} y_coords, but got {act_len} y_coords"
 
 def test_group_stave_lines_valid_img():
     # setup
@@ -59,10 +59,10 @@ def test_group_stave_lines_valid_img():
         top_margin = 250
     )
     act_y_coords = detect_hor_lines(dummy_img)
-    merged_obs_y_coords = average_close_hor_lines(act_y_coords)
+    merged_act_y_coords = average_close_hor_lines(act_y_coords)
 
     # test
-    staves = group_stave_lines(merged_obs_y_coords)
+    staves = group_stave_lines(merged_act_y_coords)
     staves_len = len(staves)
 
     assert num_staves == staves_len, f"expected {num_staves} staves, but got {staves_len} staves"
@@ -82,11 +82,11 @@ def test_remove_hor_lines():
     y_coords = detect_hor_lines(dummy_img)
 
     # test
-    dummy_img_rmv_lines = remove_hor_lines(dummy_img, y_coords)
+    no_hor_img = remove_hor_lines(dummy_img, y_coords)
 
-    obs_y_coords_post_rmvl = detect_hor_lines(dummy_img_rmv_lines)
+    act_y_coords_post_rmvl = detect_hor_lines(no_hor_img)
 
-    assert len(obs_y_coords_post_rmvl) == 0, f"expected 0 lines, but got {len(obs_y_coords_post_rmvl)} lines"
+    assert len(act_y_coords_post_rmvl) == 0, f"expected 0 lines, but got {len(act_y_coords_post_rmvl)} lines"
 
 def test_remove_vert_lines():
     # setup
@@ -106,14 +106,8 @@ def test_remove_vert_lines():
     for start, end in lines:
         cv2.line(dummy_img, start, end, 255, thickness = 1)
 
-    cv2.imshow("dummy", dummy_img)
-    cv2.waitKey(0)
-
     # test
     no_vert_img = remove_vert_lines(dummy_img)
-
-    cv2.imshow("no vert", no_vert_img)
-    cv2.waitKey(0)
 
     assert np.count_nonzero(no_vert_img) == 26, f"expected only {lines[0]} line to survive, but other lines survived"
 

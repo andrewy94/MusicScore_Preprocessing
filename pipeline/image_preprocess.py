@@ -21,6 +21,11 @@ def binarize(gray_img):
     
     return bin_img
 
+def invert(bin_img):
+    inv_img = cv2.bitwise_not(bin_img)
+
+    return bin_img
+
 def calculate_skew_angle(bin_img):
     # Calculate skew angle using canny edge detection and standard hough line transform
     # to find lines and determine the average angle of near-horizontal lines
@@ -73,11 +78,6 @@ def deskew(bin_img, skew_angle):
     pp_img = cv2.warpAffine(bin_img, rotation_matrix, (w, h), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
 
     return pp_img
-
-def invert(pp_img):
-    inv_img = cv2.bitwise_not(pp_img)
-
-    return inv_img
 
 
 
