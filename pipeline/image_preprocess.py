@@ -24,7 +24,7 @@ def binarize(gray_img):
 def invert(bin_img):
     inv_img = cv2.bitwise_not(bin_img)
 
-    return bin_img
+    return inv_img
 
 def calculate_skew_angle(bin_img):
     # Calculate skew angle using canny edge detection and standard hough line transform
