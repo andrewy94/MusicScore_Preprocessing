@@ -1,7 +1,7 @@
 import pytest
 import cv2
 import numpy as np
-from pipeline.segmentation import connected_components_segmentation
+from pipeline.segmentation import *
 
 def test_connected_component_segmentation():
     # setup
